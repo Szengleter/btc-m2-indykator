@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: btc-m2-indykator
+    env: python
+    buildCommand: ""
+    startCommand: python main.py
