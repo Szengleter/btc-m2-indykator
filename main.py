@@ -1,12 +1,18 @@
-from flask import Flask
-import os
+from flask import Flask, jsonify
+import yfinance as yf
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route('/')
 def home():
-    return "Działa! Serwis BTC/M2 gotowy 🚀"
+    return "API działa! Użyj /m2 żeby dostać dane."
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Uwaga! Render ustawia PORT jako zmienną środowiskową
-    app.run(host="0.0.0.0", port=port)        # ← TO JEST KLUCZOWE!
+@app.route('/m2')
+def m2_value():
+    ticker = yf.Ticker("^M2SL")
+    hist = ticker.history(period="1d")
+    m2 = hist["Close"].iloc[-1]
+    return jsonify({"m2": m2})
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=10000)
